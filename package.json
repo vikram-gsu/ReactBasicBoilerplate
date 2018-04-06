@@ -4,7 +4,7 @@
   "main": "index.js",
   "author": "Andrew Mead",
   "scripts": {
-    "convert": "babel src/app.js --watch --out-file public/scripts/app.js --source-maps"
+    "convert": "babel src/playground/counter-example.js --watch --out-file public/scripts/app.js --source-maps"
   },
   "license": "MIT",
   "dependencies": {

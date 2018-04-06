@@ -1,30 +1,71 @@
-let count = 0;
-const addOne = () => {
-  count++;
-  renderCounterApp();
-};
-const minusOne = () => {
-  count--;
-  renderCounterApp();
-};
-const reset = () => {
-  count = 0;
-  renderCounterApp();
-};
+class Counter extends React.Component{
+  constructor(props){
+    super(props);
+    this.incrementCounter = this.incrementCounter.bind(this);
+    this.decrementCounter = this.decrementCounter.bind(this);
+    this.resetCounter = this.resetCounter.bind(this);
+    this.state = {
+      count : 0
+    }
+  }
+  incrementCounter(e){
+    e.preventDefault();
+    this.setState(prevState => ({
+      count: prevState.count + 1
+    }));
+  }
+  decrementCounter(){
+    this.setState(prevState => ({
+      count: prevState.count -1
+    }));
 
-const appRoot = document.getElementById('app');
+  }
+  resetCounter(){
+    this.setState(() => ({
+      count: 0
+    }));
+  }
+  render(){
+    return (
+      <div>
+        <h1>Count: {this.state.count}</h1>
+        <button onClick={this.incrementCounter}>+1</button>
+        <button onClick = {this.decrementCounter}>-1</button>
+        <button onClick = {this.resetCounter}>reset</button>
+        </div>
+    )
+  }
+}
 
-const renderCounterApp = () => {
-  const templateTwo = (
-    <div>
-      <h1>Count: {count}</h1>
-      <button onClick={addOne}>+1</button>
-      <button onClick={minusOne}>-1</button>
-      <button onClick={reset}>reset</button>
-    </div>
-  );
+ReactDOM.render(<Counter />, document.getElementById('app'))
 
-  ReactDOM.render(templateTwo, appRoot);
-};
+// let count = 0;
+// const addOne = () => {
+//   count++;
+//   renderCounterApp();
+// };
+// const minusOne = () => {
+//   count--;
+//   renderCounterApp();
+// };
+// const reset = () => {
+//   count = 0;
+//   renderCounterApp();
+// };
 
-renderCounterApp();
+// const appRoot = document.getElementById('app');
+
+// const renderCounterApp = () => {
+//   const templateTwo = (
+//     <div>
+//       <h1>Count: {count}</h1>
+//       <button onClick={addOne}>+1</button>
+//       <button onClick={minusOne}>-1</button>
+//       <button onClick={reset}>reset</button>
+//     </div>
+//   );
+
+//   ReactDOM.render(templateTwo, appRoot);
+// };
+
+// renderCounterApp();
