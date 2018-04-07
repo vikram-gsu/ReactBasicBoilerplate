@@ -3,7 +3,7 @@ class Header extends React.Component{
     super()
   }
   render(){
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <div>
       <h1>Indecision App</h1>
@@ -12,17 +12,21 @@ class Header extends React.Component{
     )
   }
 }
-// class RemoveAllOptions extends React.Component{
-//   render(){
-//     return (
-//       <div>
-//         <form onSubmit={this.onFormSubmit}>
 
-//         </form>
-//       </div>
-//     );
-//   }
-// }
+class Action extends React.Component{
+  render(){
+    return (
+      <div>
+        <button 
+          onClick={this.props.showRandomOption}
+          disabled = {!this.props.hasOptions}
+        >
+          What should I do
+        </button>
+      </div>
+    );
+  }
+}
 class Options extends React.Component{
   
   render(){
@@ -46,22 +50,27 @@ class Option extends React.Component {
 }
 
 class AddOption extends React.Component {
-  onFormSubmit(e){
-    e.preventDefault();
-    console.log(e.target.option.value);
+  constructor(props){
+    super(props);
+    this.addOption = this.addOption.bind(this);
+
+    this.state = {
+      error: undefined
+    }
   }
-  removeAll(e){
-    e.preventDefault();
-    this.props.optionItems = []
-    console.log('Remove all clicked');
+  addOption(e){
+    e.preventDefault()
+    const error = this.props.addOption(e.target.elements.option.value)
+    this.setState(()=> ({error}))
   }
   render(){
     return (
       <div>
-      <form onSubmit={this.onFormSubmit}>
+      <form onSubmit={this.addOption}>
+      {this.state.error && <p>{this.state.error}</p>}
       <input type="text" name="option"></input>
       <button>Add Option</button>
-      <button onClick={this.removeAll.bind(this)}>RemoveAll</button>
+      <button onClick={this.props.removeAll}>RemoveAll</button>
       </form>
       </div>
     )
@@ -69,12 +78,45 @@ class AddOption extends React.Component {
 }
 
 class Indecision extends React.Component{
+  constructor(props){
+    super(props);
+    this.addOption = this.addOption.bind(this);
+    this.removeAllOptions = this.removeAllOptions.bind(this);
+    this.showRandomOption = this.showRandomOption.bind(this);
+    this.state = {
+      options: []
+    }
+  }
+  showRandomOption(){
+    const randNbr = Math.floor(Math.random() * this.state.options.length);
+    alert(this.state.options[randNbr])
+  }
+  addOption(option){
+    if (option.trim() == ''){
+      return 'Please enter a valid value';
+    }else if(this.state.options.indexOf(option) != -1){
+      return 'This option already exists';
+    }
+
+    this.setState(prevState => ({
+      options: [...prevState.options, option]
+    }))
+  }
+  removeAllOptions(e){
+    e.preventDefault();
+    this.setState(() => ({
+      options: []
+    }));
+  }
+
   render(){ 
-    const options = ['Option 1', 'Option 2', 'Option 4']
     return (<div>
       <Header title='test'/>
-      <Options optionItems = {options}/>
-      <AddOption optionItems = {options}/>
+      <Action showRandomOption = {this.showRandomOption} hasOptions = {this.state.options.length >0} />
+      <Options optionItems = {this.state.options}/>
+      <AddOption optionItems = {this.state.options} addOption = {this.addOption}
+      removeAll = {this.removeAllOptions}/>
+
       </div>
     )}
   }
