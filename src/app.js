@@ -1,53 +1,39 @@
-class Header extends React.Component{
-  constructor(){
-    super()
-  }
-  render(){
-    // console.log(this.props)
-    return (
-      <div>
-      <h1>Indecision App</h1>
-      <h2>Randomize your life!</h2>
-      </div>
-    )
-  }
-}
 
-class Action extends React.Component{
-  render(){
-    return (
-      <div>
-        <button 
-          onClick={this.props.showRandomOption}
-          disabled = {!this.props.hasOptions}
-        >
-          What should I do
-        </button>
-      </div>
-    );
-  }
-}
-class Options extends React.Component{
-  
-  render(){
-    return (
-      <div>
-      <h3>Here are your options:</h3>
-      <ul>
-      {this.props.optionItems.map(o => <Option key={o} listitem={o} />)}
-      </ul>
-      </div>
-    )
-  }
-}
+const Header = props => (
+  <div>
+    <h1>{props.title}</h1>
+    <h2>{props.subtitle}</h2>
+    </div>
+);
 
-class Option extends React.Component { 
-  render(){
-    return (
-      <li>{this.props.listitem}</li>
-    )
-  }
-}
+Header.defaultProps = {
+  title: 'Indecision App'
+};
+
+const Action = (props) => (
+  <div>
+    <button 
+      onClick={props.showRandomOption}
+      disabled = {!props.hasOptions}
+    >
+      What should I do
+    </button>
+  </div>
+);
+
+const Options = (props) => (
+  <div>
+  <h3>Here are your options:</h3>
+  <ul>
+  {props.optionItems.map(o => <Option key={o} listitem={o} removeOption={props.removeOption} />)}
+  </ul>
+  </div>
+);
+
+const Option = (props) => (<li>
+      {props.listitem}
+      <button onClick={e => props.removeOption(props.listitem)}>x</button>
+    </li>)
 
 class AddOption extends React.Component {
   constructor(props){
@@ -83,6 +69,7 @@ class Indecision extends React.Component{
     this.addOption = this.addOption.bind(this);
     this.removeAllOptions = this.removeAllOptions.bind(this);
     this.showRandomOption = this.showRandomOption.bind(this);
+    this.removeOption = this.removeOption.bind(this);
     this.state = {
       options: []
     }
@@ -102,6 +89,12 @@ class Indecision extends React.Component{
       options: [...prevState.options, option]
     }))
   }
+  removeOption(option){
+    this.setState((prevState) => ({
+      options: prevState.options.filter(o => o != option)
+    }));
+    
+  }
   removeAllOptions(e){
     e.preventDefault();
     this.setState(() => ({
@@ -111,11 +104,13 @@ class Indecision extends React.Component{
 
   render(){ 
     return (<div>
-      <Header title='test'/>
+      <Header subtitle='Randomize your life!'/>
       <Action showRandomOption = {this.showRandomOption} hasOptions = {this.state.options.length >0} />
-      <Options optionItems = {this.state.options}/>
-      <AddOption optionItems = {this.state.options} addOption = {this.addOption}
-      removeAll = {this.removeAllOptions}/>
+      <Options optionItems = {this.state.options}
+                removeOption = {this.removeOption}/>
+      <AddOption optionItems = {this.state.options} 
+                  addOption = {this.addOption}
+                  removeAll = {this.removeAllOptions}/>
 
       </div>
     )}
