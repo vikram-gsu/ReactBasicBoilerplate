@@ -1,0 +1,42 @@
+.big-button {
+  background-color: lighten($purple, 10%);
+  border: none;
+  color: white;
+  font-size: $l-size;
+  font-weight: bold;
+  margin-bottom: $xl-size;
+  width: 100%;
+  border-bottom: 0.6rem solid $purple;
+  padding: $m-size 0;
+}
+
+.big-button:disabled {
+  opacity: .5
+}
+
+.button {
+  background: lighten($purple, 10%);
+  border: none;
+  border-bottom: 0.3rem solid $purple;
+  color: white;
+  font-weight: 500;
+  padding: 0 $s-size;
+}
+
+.button--link {
+  background:none;
+  border: none;
+  color: $off-white;
+  padding: 0;
+}
+
+.round-button {
+  border-radius: 50%;
+  border: 0.1rem solid $off-white;
+  padding: 0.1rem;
+  margin: 0 $s-size;
+  width: $s-size;
+}
+.round-button:hover{
+  background: darken($light-blue, 10%)
+}
